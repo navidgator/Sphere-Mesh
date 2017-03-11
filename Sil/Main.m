@@ -57,12 +57,14 @@ c_i = round(abs(p - (rho_i*N(:,p_index))));
 
 if (I(c_i(1,1),c_i(2,1)) == 1)
 
-    [JJ,II] = ind2sub(size(S),CORRS(c_i(2,1),c_i(1,1))); 
+    [JJ,II] = ind2sub(size(S),CORRS(c_i(2,1),c_i(1,1)));
+    JJ = JJ+1;
     p_t = [II;JJ] ;
     rho_i1 = RADIUS(N(:,p_index),p,p_t);
     plot(II,JJ,'.r','MarkerSize',20)
 else
-    [JJ,II] = ind2sub(size(S2),CORRS2(c_i(2,1),c_i(1,1))); 
+    [JJ,II] = ind2sub(size(S2),CORRS2(c_i(2,1),c_i(1,1)));
+    JJ = JJ+1;
     p_t = [II;JJ] ;
     rho_i1 = RADIUS(N(:,p_index),p,p_t);
     plot(II,JJ,'.r','MarkerSize',20)

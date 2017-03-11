@@ -11,13 +11,25 @@ figure; imagesc(I);
 % imagesc(I), axis equal;
 
 mex CXXFLAGS='$CXXFLAGS -std=c++11' dtform.cpp; 
- tic()
-[I2, CORRS] = dtform(I);
- toc();
+tic()
+% [I2, CORRS] = dtform(I);
+% [I2] = dtform(I);
+% S = round(1-I);
+S = 1-I;
+figure; imagesc(S);
+[I3] = dtform(S);
+% [I3, CORRS2] = dtform(S);
+toc();
+
+return;
+
 figure, imagesc(I2), axis equal;
-% hold on;
-% contour (I2, [0.5,0.5],'color', 'white');
-% [II,JJ] = ind2sub(size(I2),CORRS(140,140))
-% hold on;
-% plot(II,JJ,'.r','MarkerSize',20)
-% plot(140,140,'.b','MarkerSize',20)
+hold on;
+contour (I2, [0.5,0.5],'color', 'white');
+% figure, imagesc(I22), axis equal;
+% contour (I22, [0.5,0.5],'color', 'white');
+[JJ,II] = ind2sub(size(I),CORRS(140,140));
+JJ = JJ +1; 
+hold on;
+plot(II,JJ,'.r','MarkerSize',20)
+plot(140,140,'.b','MarkerSize',20)

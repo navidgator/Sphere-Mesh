@@ -1,0 +1,15 @@
+function len =  RADIUS (N,p,p_i)
+
+ theta = acos((N' * (p - p_i))/ ((sum(p-p_i).^2).^0.5)); 
+ if (theta > pi/2)
+     theta = theta - pi/2;
+ end;
+ len =  (sum((p-p_i).^2).^0.5)/ abs((2*cos(theta)));
+
+
+% len = (sum((p-p_i).^2).^0.5)/2;
+% 
+% theta = ((N' *( (p - p_i))/ ((sum(p-p_i).^2).^0.5)))
+% len =  (sum((p-p_i).^2).^0.5)/ abs((2*theta));
+
+end

@@ -7,18 +7,21 @@ clc, clear, close all;
 I0 = ((XX+.2).^2 + (YY-.3).^2 - .2^2) < 0;
 I1 = ((XX-.3).^2 + (YY+.4).^2 - .2^2) < 0;
 I = I0 + I1;
-
+figure; imagesc(I);
 % imagesc(I), axis equal;
 
 mex CXXFLAGS='$CXXFLAGS -std=c++11' dtform.cpp; 
-tic()
+ tic()
 [I2, CORRS] = dtform(I);
-toc();
-figure; hold all; imagesc(I2), axis equal;
+[I22, CORRS2] = dtform(1-I);
+ toc();
 
-
-p = [50 50];
-[pp1,pp2] = ind2sub(size(CORRS), CORRS(p(1), p(2)))
-%scatter(p(1), p(2));
-%scatter(pp1, pp2);
-plot([p(1) pp1], [p(2) pp2]);
+ figure, imagesc(I2), axis equal;
+hold on;
+contour (I2, [0.5,0.5],'color', 'white');
+contour (I22, [0.5,0.5],'color', 'white');
+[JJ,II] = ind2sub(size(I),CORRS(140,140));
+JJ = JJ +1; 
+hold on;
+plot(II,JJ,'.r','MarkerSize',20)
+plot(140,140,'.b','MarkerSize',20)
