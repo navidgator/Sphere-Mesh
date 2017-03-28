@@ -15,7 +15,7 @@ tic()
 % [I2, CORRS] = dtform(I);
 % [I2] = dtform(I);
 % S = round(1-I);
-S = 1-I;
+S = 1.0-I;
 figure; imagesc(S);
 [I3] = dtform(S);
 % [I3, CORRS2] = dtform(S);

@@ -1,0 +1,181 @@
+clc, clear, close all;
+
+quiver2 = @(P,V,varargin) quiver( P(1,:), P(2,:), V(1,:), V(2,:), varargin{:} );
+plot2 = @(P,varargin) plot(P(1,:), P(2,:), varargin{:} );
+
+
+
+I = imread('fire.png');
+% I = imread ('head.jpg'); 
+% I = imread('girl2.jpg');
+size(I,1)
+size(I,2)
+
+I = I(:,:,1) / 255; % Coverting image pixels to black and white
+imagesc(I);
+
+S = double(I);       % Using for any function that needs "double image"    
+S2 =  1-S;      % fliping the image color (black->white  , white -> black)
+
+mex  CXXFLAGS='$CXXFLAGS -std=c++11' dtform.cpp;
+
+
+[DIST, CORRS] = dtform(S);  % dtform for the Original image 
+ figure ; imagesc(DIST);
+[DIST2, CORRS2] = dtform(S2); % dtform for the color-fliped image 
+%  figure; imagesc(DIST2);
+figure; axis equal; hold all; 
+[P,~] = contour(I, [0.5,0.5]);  % boundry of the image
+
+%%--- Compute normals%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+prand_x = round (1 +( size(I,2) * rand)); % COMPUTING A RANDOM INDEX
+prand_y = round (1 + (size(I,1) * rand));
+plot(prand_x,prand_y,'.black','MarkerSize',20);
+
+prand = [prand_y , prand_x];
+
+I(prand_y,prand_x)
+if (I(prand_y,prand_x)== 0)         %Inside
+    [JJ,II] = ind2sub(size(S),CORRS(prand_y,prand_x));
+    N =  [JJ,II] - prand ;
+    
+else
+     [JJ,II] = ind2sub(size(S2),CORRS2(prand_y,prand_x));
+    N = prand - [JJ,II] ; 
+end
+N = N/norm(N)
+quiver(II,JJ,N(2),N(1),100);
+
+
+p = [JJ,II];
+hold on;
+plot(p(2),p(1),'.r','MarkerSize',20);
+
+ [center,rho] = Circle (I, p , N ,CORRS, CORRS2, 7);
+% 
+% figure; hold all; axis equal;
+% contour(I, [0.5,0.5]);
+% plot(center(1),center(2),'.g','MarkerSize',20);
+% plot(II,JJ,'.b','MarkerSize',20);
+% th = 0:pi/50:2*pi;
+% xunit = rho * cos(th) + center(1);
+% yunit = rho * sin(th) + center(2);
+% h = plot(xunit, yunit);
+
+
+N2 = Rotate90(N');
+N2R = -N2;
+quiver(center(2),center(1),N2(2),N2(1),200);
+quiver(center(2),center(1),N2R(2),N2R(1),200);
+
+
+return;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+S_x = 1;
+S_y = 1;
+m = N(2)/N(1);
+if (N(1) < 0)
+    S_x = size(I,2);
+end
+if (N(2) < 0)
+    S_y = size(I,1);
+end
+
+
+if (size(I,1)/size(I,2) < abs(m))
+    S_x = round((S_y-p(2)+ (m*p(1)) )/m);
+else
+    S_y = round ( (m*(S_x-p(1)))+ p(2));
+end
+
+plot(S_x,S_y,'*green','MarkerSize',10);
+
+
+S_x
+S_y
+p_t = zeros(1,2);
+[p_t(2),p_t(1)] = ind2sub(size(S2),CORRS2(S_y,S_x));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+plot(p_t(1),p_t(2),'.r','MarkerSize',20);
+rho_i = RADIUS(N,p,p_t);     %RADIUS OF A TANGENT BALL TO BOTH POINTS
+% rho_i = (sum((p-p_t).^2).^0.5)/2
+c_i = round(abs(p - (rho_i*N)));     %CENTER OF THE TANGENT BALL
+% c_i = round( abs( (p_t+p)/2)) 
+
+ plot(c_i(1),c_i(2),'.g','MarkerSize',20);
+
+
+
+if (I(c_i(1),c_i(2)) == 1)          % IF THE CENTER LIES INSIDE OF THE IMAGE
+    [JJ,II] = ind2sub(size(S),CORRS(c_i(2),c_i(1))); 
+else                                    % IF THE CENTER LIES OUTSIDE THE IMAGE
+    [JJ,II] = ind2sub(size(S2),CORRS2(c_i(2),c_i(1))); 
+end
+
+JJ = JJ+1;
+p_t = [II,JJ];
+rho_i1 = RADIUS(N,p,p_t);
+plot(II,JJ,'.b','MarkerSize',20);
+% plot(p_t(1),p_t(2),'.black','MarkerSize',20);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+hold all;
+th = 0:pi/50:2*pi;
+xunit = rho_i * cos(th) + c_i(1);
+yunit = rho_i * sin(th) + c_i(2);
+h = plot(xunit, yunit);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% return ;
+ EPSILON = 6;
+
+
+while (abs(rho_i - rho_i1) > EPSILON)
+    
+    rho_i = rho_i1;
+    c_i = round ( abs( p - (rho_i*N)));
+    
+    plot(c_i(1),c_i(2),'.g','MarkerSize',20);
+
+    if (I(c_i(1),c_i(2)) == 1)          % IF THE CENTER LIES OUTSIDE OF THE IMAGE
+        [JJ,II] = ind2sub(size(S),CORRS(c_i(2),c_i(1))); 
+    else                            % IF THE CENTER LIES INSIDE THE IMAGE
+        [JJ,II] = ind2sub(size(S2),CORRS2(c_i(2),c_i(1))); 
+    end
+    
+    JJ = JJ+1;
+    p_t = [II,JJ]; 
+    
+    rho_i1 = RADIUS(N,p,p_t);
+    
+    plot(II,JJ,'.b','MarkerSize',20)
+   
+    th = 0:pi/50:2*pi;
+    xunit = rho_i * cos(th) + c_i(1);
+    yunit = rho_i * sin(th) + c_i(2);
+    h = plot(xunit, yunit);
+
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Medial Ball 
+figure; hold all; axis equal;
+contour(I, [0.5,0.5]);
+plot(c_i(1),c_i(2),'.g','MarkerSize',20);
+plot(II,JJ,'.b','MarkerSize',20);
+th = 0:pi/50:2*pi;
+xunit = rho_i * cos(th) + c_i(1);
+yunit = rho_i * sin(th) + c_i(2);
+h = plot(xunit, yunit);
+
+
+
+
