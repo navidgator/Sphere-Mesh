@@ -19,7 +19,7 @@ mex  CXXFLAGS='$CXXFLAGS -std=c++11' dtform.cpp;
 
 
 [DIST, CORRS] = dtform(S);  % dtform for the Original image 
-% figure ; imagesc(DIST);
+figure ; imagesc(DIST);
 [DIST2, CORRS2] = dtform(S2); % dtform for the color-fliped image 
 % figure; imagesc(DIST2);
 figure; axis equal; hold all; 
@@ -28,19 +28,49 @@ figure; axis equal; hold all;
 %%--- Compute normals%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 n_shift = 10;
 E = circshift(P,-n_shift,2)-P;
-N = [0 -1;1 0]*E; % rotate edge by 90 degree
-for i=1:size(N,2), N(:,i) = N(:,i)./norm(N(:,i)); end
+N1 = [0 -1;1 0]*E; % rotate edge by 90 degree
+for i=1:size(N1,2), N1(:,i) = N1(:,i)./norm(N1(:,i)); end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % quiver2(P,N);
 
 % r_ind = round (1 + size(P,2) * rand); % COMPUTING A RANDOM INDEX
 
 % p_index = r_ind;        % THE INDEX OF THE FIRST POINT (Random)
-p_index = 1000;        % THE INDEX OF THE FIRST POINT (Fixed)
-p = P(:,p_index)       % FIRST POINT
-hold on;
-plot(p(1,1),p(2,1),'.r','MarkerSize',20);
+% for p_index = 1 :size(P,2)
 
+
+
+  for p_index = 2 :100:size(P,2)
+   p = P(:,p_index);
+   ttt= p;
+   ttt(1) = p(2);
+   ttt(2) = p(1);
+   p = ttt;
+   if (p(2)> size(I,2) || p(1)> size(I,1))
+       continue;
+   end
+
+    N = N1(:,p_index);
+   ttt= N;
+   ttt(1) = N(2);
+   ttt(2) = N(1);
+   N = ttt;
+%    if (N(1)==0&&N(2)==1)
+%        N(1) = 0.0001
+%    else if (N(2)==0&&N(1)==1)
+%            N(2) = 0.0001
+%        end
+%    end;
+     [center,rho] = Circle (I, p' , N' ,CORRS, CORRS2, 10);
+%      plot(center(1),center(2),'.g','MarkerSize',20)
+   hold on;
+   plot(p(2),p(1),'.r','MarkerSize',20); 
+   pause(0.1);
+end
+% p_index = 1000;        % THE INDEX OF THE FIRST POINT (Fixed)
+% p = P(:,p_index)       % FIRST POINT
+
+return ; 
 
 % pt_index =  round (1 + size(P,2) * rand); % INDEX OF THE SECOND POINT (Random)
 pt_index =  4567;       % INDEX OF THE SECOND POINT (Fixed)
@@ -48,9 +78,9 @@ p_t = P(:,pt_index);    % SECOND POINT
 plot(p_t(1,1),p_t(2,1),'.r','MarkerSize',20);
 % qqq = abs(p_t - p)
 
- rho_i = RADIUS(N(:,p_index),p,p_t);     %RADIUS OF A TANGENT BALL TO BOTH POINTS
+ rho_i = RADIUS(N1(:,p_index),p,p_t);     %RADIUS OF A TANGENT BALL TO BOTH POINTS
 % rho_i = (sum((p-p_t).^2).^0.5)/2
- c_i = round(abs(p - (rho_i*N(:,p_index))));     %CENTER OF THE TANGENT BALL
+ c_i = round(abs(p - (rho_i*N1(:,p_index))));     %CENTER OF THE TANGENT BALL
 % c_i = round( abs( (p_t+p)/2)) 
  plot(c_i(1,1),c_i(2,1),'.g','MarkerSize',20);
 
@@ -64,7 +94,7 @@ end
 
 JJ = JJ+1;
 p_t = [II;JJ];
-rho_i1 = RADIUS(N(:,p_index),p,p_t);
+rho_i1 = RADIUS(N1(:,p_index),p,p_t);
 plot(II,JJ,'.b','MarkerSize',20);
 % plot(p_t(1),p_t(2),'.black','MarkerSize',20);
 
@@ -82,7 +112,7 @@ h = plot(xunit, yunit);
 while (abs(rho_i - rho_i1) > EPSILON)
     
     rho_i = rho_i1;
-    c_i = round ( abs( p - (rho_i*N(:,p_index))));
+    c_i = round ( abs( p - (rho_i*N1(:,p_index))));
     
     plot(c_i(1,1),c_i(2,1),'.black','MarkerSize',20);
 
@@ -95,7 +125,7 @@ while (abs(rho_i - rho_i1) > EPSILON)
     JJ = JJ+1;
     p_t = [II;JJ]; 
     
-    rho_i1 = RADIUS(N(:,p_index),p,p_t);
+    rho_i1 = RADIUS(N1(:,p_index),p,p_t);
     
     plot(II,JJ,'.b','MarkerSize',20)
    

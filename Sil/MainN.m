@@ -55,18 +55,18 @@ plot(p(2),p(1),'.r','MarkerSize',20);
 % 
 % figure; hold all; axis equal;
 % contour(I, [0.5,0.5]);
-% plot(center(1),center(2),'.g','MarkerSize',20);
+% plot(center(2),center(1),'.g','MarkerSize',20);
 % plot(II,JJ,'.b','MarkerSize',20);
 % th = 0:pi/50:2*pi;
-% xunit = rho * cos(th) + center(1);
-% yunit = rho * sin(th) + center(2);
+% xunit = rho * cos(th) + center(2);
+% yunit = rho * sin(th) + center(1);
 % h = plot(xunit, yunit);
 
 
 N2 = Rotate90(N');
 N2R = -N2;
-quiver(center(2),center(1),N2(2),N2(1),200);
-quiver(center(2),center(1),N2R(2),N2R(1),200);
+% quiver(center(2),center(1),N2(2),N2(1),200);
+% quiver(center(2),center(1),N2R(2),N2R(1),200);
 
 
 return;
