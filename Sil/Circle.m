@@ -34,7 +34,7 @@ c_i = round(abs(p - (rho_i*N)));     %CENTER OF THE TANGENT BALL
 
 
 
-if (Img(c_i(2),c_i(1)) == 0)          % IF THE CENTER LIES INSIDE OF THE IMAGE
+if (Img(c_i(1),c_i(2)) == 0)          % IF THE CENTER LIES INSIDE OF THE IMAGE
     [JJ,II] = ind2sub(size(S),CORRS(c_i(1),c_i(2))); 
 else                                    % IF THE CENTER LIES OUTSIDE THE IMAGE
     [JJ,II] = ind2sub(size(S2),CORRS2(c_i(1),c_i(2))); 
@@ -59,10 +59,10 @@ R = rho_i;
 
 
 
-while (abs(rho_i - rho_i1) > epsilon)
+while (rho_i - rho_i1 > epsilon)
     
     rho_i = rho_i1;
-    c_i = round(abs(p - (rho_i*N)))
+    c_i = round(abs(p - (rho_i*N)));
     
 %     plot(c_i(2),c_i(1),'.g','MarkerSize',20);
    if (Img(c_i(1),c_i(2)) == 0)          % IF THE CENTER LIES INSIDE OF THE IMAGE
@@ -72,7 +72,9 @@ else                                    % IF THE CENTER LIES OUTSIDE THE IMAGE
    end
 JJ = JJ+1;
 p_t = [JJ,II];
-rho_i1 = RADIUS(N,p,p_t);
+% if (abs(norm(p-c_i)-norm(p_t - c_i))<epsilon)
+%     break;
+
 % plot(II,JJ,'.b','MarkerSize',20);
 % plot(p_t(2),p_t(1),'.black','MarkerSize',20);   
 % hold all;
@@ -80,10 +82,8 @@ rho_i1 = RADIUS(N,p,p_t);
 % xunit = rho_i * cos(th) + c_i(2);
 % yunit = rho_i * sin(th) + c_i(1);
 % h = plot(xunit, yunit);
-
-
-end
-plot(c_i(2),c_i(1),'.g','MarkerSize',20);
+% end
+% plot(c_i(2),c_i(1),'.g','MarkerSize',20);
 C = c_i;
 R = rho_i;
 

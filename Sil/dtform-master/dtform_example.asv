@@ -15,7 +15,7 @@ tic()
 [I2, CORRS] = dtform(I);
 toc();
 figure; hold all; imagesc(I2), axis equal;
-[S2, CORRS2] = dtform(S);
+
 
 p = [50 50];
 [pp1,pp2] = ind2sub(size(CORRS), CORRS(p(1), p(2)))

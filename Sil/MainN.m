@@ -5,11 +5,13 @@ plot2 = @(P,varargin) plot(P(1,:), P(2,:), varargin{:} );
 
 
 
-I = imread('fire.png');
+% I = imread('fire.png');
+% I = imread('body1.jpg');
+I = imread('body2.jpeg');
 % I = imread ('head.jpg'); 
 % I = imread('girl2.jpg');
-size(I,1)
-size(I,2)
+% size(I,1)
+% size(I,2)
 
 I = I(:,:,1) / 255; % Coverting image pixels to black and white
 imagesc(I);
@@ -27,6 +29,8 @@ mex  CXXFLAGS='$CXXFLAGS -std=c++11' dtform.cpp;
 figure; axis equal; hold all; 
 [P,~] = contour(I, [0.5,0.5]);  % boundry of the image
 
+% for iter =1 :100
+
 %%--- Compute normals%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 prand_x = round (1 +( size(I,2) * rand)); % COMPUTING A RANDOM INDEX
 prand_y = round (1 + (size(I,1) * rand));
@@ -43,7 +47,7 @@ else
      [JJ,II] = ind2sub(size(S2),CORRS2(prand_y,prand_x));
     N = prand - [JJ,II] ; 
 end
-N = N/norm(N)
+N = N/norm(N);
 quiver(II,JJ,N(2),N(1),100);
 
 
@@ -51,24 +55,24 @@ p = [JJ,II];
 hold on;
 plot(p(2),p(1),'.r','MarkerSize',20);
 
- [center,rho] = Circle (I, p , N ,CORRS, CORRS2, 7);
+ [center,rho] = Circle (I, p , N ,CORRS, CORRS2, 4);
 % 
 % figure; hold all; axis equal;
-% contour(I, [0.5,0.5]);
-% plot(center(2),center(1),'.g','MarkerSize',20);
+contour(I, [0.5,0.5]);
+plot(center(2),center(1),'.g','MarkerSize',20);
 % plot(II,JJ,'.b','MarkerSize',20);
-% th = 0:pi/50:2*pi;
-% xunit = rho * cos(th) + center(2);
-% yunit = rho * sin(th) + center(1);
-% h = plot(xunit, yunit);
+th = 0:pi/50:2*pi;
+xunit = rho * cos(th) + center(2);
+yunit = rho * sin(th) + center(1);
+h = plot(xunit, yunit);
 
 
 N2 = Rotate90(N');
 N2R = -N2;
 % quiver(center(2),center(1),N2(2),N2(1),200);
 % quiver(center(2),center(1),N2R(2),N2R(1),200);
-
-
+% pause (0.1);
+% end
 return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
