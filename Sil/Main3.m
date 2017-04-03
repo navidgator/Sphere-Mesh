@@ -5,9 +5,9 @@ plot2 = @(P,varargin) plot(P(1,:), P(2,:), varargin{:} );
 
 
 
-I = imread('body1.jpg');
+% I = imread('body1.jpg');
 % I = imread('body2.jpeg');
-% I = imread('fire.png');
+I = imread('fire.png');
 % I = imread ('head.jpg');
 % I = imread('girl2.jpg');
 
@@ -41,7 +41,7 @@ for i=1:size(N1,2), N1(:,i) = N1(:,i)./norm(N1(:,i)); end
 % for p_index = 1 :size(P,2)
 
 iter = round(size(P,2)/1000);
-
+% iter = 1;
 for p_index = 1 :iter:size(P,2)
 %     p_index= 301;
     p = P(:,p_index);
