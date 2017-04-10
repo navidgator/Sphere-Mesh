@@ -1,4 +1,4 @@
-function [C,R,IP] =  Circle (Img, p , N , CORRS, CORRS2, epsilon)
+function [C,R,PI] =  Circle8 (Img, p , N , CORRS, CORRS2, epsilon)
 
 S = double(Img);      % Using for any function that needs "double image"
 S2 =  1-S;      % fliping the image color (black->white  , white -> black)
@@ -53,15 +53,22 @@ rho_i1 = RADIUS(N,p,p_t);
 % yunit = rho_i * sin(th) + c_i(1);
 % h = plot(xunit, yunit);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-while (1)
+C = c_i;
+R = rho_i;
+% return ;
+
+
+
+while (rho_i - rho_i1 > epsilon)
+    
     rho_i = rho_i1;
-    %     c_id = abs(p - (rho_i*N));
+    %     c_i = round(abs(p - (rho_i*N)));
+    c_id = abs(p - (rho_i*N));
     c_i = round(abs(p - (rho_i*N)));
-    flag = 0;
+    
+    Closest_i = c_i;
+    dist_i = size(Img,1) * size(Img,2);
     for  i = -1:1
-        if (flag ==1)
-            break;
-        end
         for j = -1:1
             if (c_i(1)+i > 0 && c_i(1)+i < size(Img,1) && c_i(2)+j > 0 && c_i(2)+j < size(Img,2))
                 tmp = [c_i(1)+i , c_i(2)+j];
@@ -71,33 +78,31 @@ while (1)
                     [JJ,II] = ind2sub(size(S2),CORRS2(tmp(1),tmp(2)));
                 end
                 JJ = JJ+1;
-                p_t = [JJ,II];
-                % if (abs(norm(p-c_i)-norm(p_t - c_i))<epsilon)
-                %     break;
-                rho_i1 = RADIUS(N,p,p_t);
+                p_tt = [JJ,II];
                 
-                if(rho_i - rho_i1 < epsilon)
-                    c_i = tmp ;
-                    flag = 1;
-                    break;
+                pp = c_id-tmp;
+                if(norm(pp)<dist_i)
+                    dist_i = norm(pp);
+                    Closest_i = tmp;
+                    p_t = p_tt; 
                 end
             end
         end
     end
-    if (flag == 0)
-        if (Img(c_i(1),c_i(2)) == 0)          % IF THE CENTER LIES INSIDE OF THE IMAGE
-            [JJ,II] = ind2sub(size(S),CORRS(c_i(1),c_i(2)));
-        else                                    % IF THE CENTER LIES OUTSIDE THE IMAGE
-            [JJ,II] = ind2sub(size(S2),CORRS2(c_i(1),c_i(2)));
-        end
-        JJ = JJ+1;
-        p_t = [JJ,II];
-        
-      
-    end
-    if (flag ==1)
-        break;
-    end
+    c_i = Closest_i;
+    
+    
+    
+    %     plot(c_i(2),c_i(1),'.g','MarkerSize',20);
+
+    rho_i1 = RADIUS(N,p,p_t);
+    %  plot(II,JJ,'.b','MarkerSize',20);
+    % plot(p_t(2),p_t(1),'.black','MarkerSize',20);
+    % hold all;
+    % th = 0:pi/50:2*pi;
+    % xunit = rho_i * cos(th) + c_i(2);
+    % yunit = rho_i * sin(th) + c_i(1);
+    % h = plot(xunit, yunit);
 end
 
 
@@ -105,6 +110,5 @@ end
 % plot(c_i(2),c_i(1),'.g','MarkerSize',20);
 C = c_i;
 R = rho_i;
-IP = p_t;
-
+PI = p_t;
 end

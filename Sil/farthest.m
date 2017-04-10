@@ -51,29 +51,10 @@ if tmp==0
 end
 
 L	= (c_sel(ind_xy,2) - p(ind_xy))./v(ind_xy);
-% fprintf('L = %1.5f\r\n',L);
 
 ind_yx	= 3 - ind_xy; 
-% ind_yx	= ind_yx - floor(ind_yx/2)*2
-
-
-
 b(ind_xy)	= c_sel(ind_xy,1);
 b(ind_yx)	= p(ind_yx) + L*v(ind_yx);
-
 b = b';
-% ttt = b;
-% ttt(1) = b(2);
-% ttt(2) = b(1);
-% b = ttt;
-% if 1
-% 	figure
-% 	hold on
-% 	plot(p(2),p(1),'ro')
-% 	L = 500;
-% 	plot([p(2),p(2)+L*v(2)],[p(1),p(1)+L*v(1)],'g')
-% 	plot(corners(1,:),corners(2,:),'b+')
-% 	plot(corners(1,:),corners(2,:),'b-')
-% 	axis equal
-% end
+
 end

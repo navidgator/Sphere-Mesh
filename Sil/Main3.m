@@ -5,9 +5,9 @@ plot2 = @(P,varargin) plot(P(1,:), P(2,:), varargin{:} );
 
 
 
-% I = imread('body1.jpg');
+I = imread('body1.jpg');
 % I = imread('body2.jpeg');
-I = imread('fire.png');
+% I = imread('fire.png');
 % I = imread ('head.jpg');
 % I = imread('girl2.jpg');
 
@@ -40,7 +40,7 @@ for i=1:size(N1,2), N1(:,i) = N1(:,i)./norm(N1(:,i)); end
 % p_index = r_ind;        % THE INDEX OF THE FIRST POINT (Random)
 % for p_index = 1 :size(P,2)
 
-iter = round(size(P,2)/1000);
+iter = round(size(P,2)/300);
 % iter = 1;
 for p_index = 1 :iter:size(P,2)
 %     p_index= 301;
@@ -59,17 +59,18 @@ for p_index = 1 :iter:size(P,2)
     ttt(2) = N(1);
     N = ttt;
     
-    [center,rho] = Circle (I, p' , N' ,CORRS, CORRS2, 5);
+    [center,rho,PI] = Circle(I, p' , N' ,CORRS, CORRS2,5);
     plot(center(2),center(1),'.g','MarkerSize',5);
     
-%     th = 0:pi/50:2*pi;
+%     th = 0:pi/500:2*pi;
 %     xunit = rho * cos(th) + center(2);
 %     yunit = rho * sin(th) + center(1);
-%     area(xunit,yunit);
+% %     area(xunit,yunit);
 %     h = plot(xunit, yunit);
-    %    plot(center(1),center(2),'.g','MarkerSize',20)
-    hold on;
-    %    plot(p(2),p(1),'.r','MarkerSize',20);
+%     plot(center(2),center(1),'.g','MarkerSize',10);
+%     plot(PI(2),PI(1),'.black','MarkerSize',10);
+%     hold on;
+%     plot(p(2),p(1),'.r','MarkerSize',10);
     pause(0.1);
 end
 
@@ -94,81 +95,6 @@ return ;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% p_index = 1000;        % THE INDEX OF THE FIRST POINT (Fixed)
-% p = P(:,p_index)       % FIRST POINT
-% pt_index =  round (1 + size(P,2) * rand); % INDEX OF THE SECOND POINT (Random)
-pt_index =  4567;       % INDEX OF THE SECOND POINT (Fixed)
-p_t = P(:,pt_index);    % SECOND POINT
-plot(p_t(1,1),p_t(2,1),'.r','MarkerSize',20);
-% qqq = abs(p_t - p)
-
-rho_i = RADIUS(N1(:,p_index),p,p_t);     %RADIUS OF A TANGENT BALL TO BOTH POINTS
-% rho_i = (sum((p-p_t).^2).^0.5)/2
-c_i = round(abs(p - (rho_i*N1(:,p_index))));     %CENTER OF THE TANGENT BALL
-% c_i = round( abs( (p_t+p)/2))
-plot(c_i(1,1),c_i(2,1),'.g','MarkerSize',20);
-
-
-
-if (I(c_i(1,1),c_i(2,1)) == 0)          % IF THE CENTER LIES OUTSIDE OF THE IMAGE
-    [JJ,II] = ind2sub(size(S),CORRS(c_i(2,1),c_i(1,1)));
-else                                    % IF THE CENTER LIES INSIDE THE IMAGE
-    [JJ,II] = ind2sub(size(S2),CORRS2(c_i(2,1),c_i(1,1)));
-end
-
-JJ = JJ+1;
-p_t = [II;JJ];
-rho_i1 = RADIUS(N1(:,p_index),p,p_t);
-plot(II,JJ,'.b','MarkerSize',20);
-% plot(p_t(1),p_t(2),'.black','MarkerSize',20);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-hold all;
-th = 0:pi/50:2*pi;
-xunit = rho_i * cos(th) + c_i(1,1);
-yunit = rho_i * sin(th) + c_i(2,1);
-h = plot(xunit, yunit);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% return ;
-EPSILON = 6;
-
-
-while (abs(rho_i - rho_i1) > EPSILON)
-    
-    rho_i = rho_i1;
-    c_i = round ( abs( p - (rho_i*N1(:,p_index))));
-    
-    plot(c_i(1,1),c_i(2,1),'.black','MarkerSize',20);
-    
-    if (I(c_i(1,1),c_i(2,1)) == 1)          % IF THE CENTER LIES inside OF THE IMAGE
-        [JJ,II] = ind2sub(size(S),CORRS(c_i(2,1),c_i(1,1)));
-    else                            % IF THE CENTER LIES outside THE IMAGE
-        [JJ,II] = ind2sub(size(S2),CORRS2(c_i(2,1),c_i(1,1)));
-    end
-    
-    JJ = JJ+1;
-    p_t = [II;JJ];
-    
-    rho_i1 = RADIUS(N1(:,p_index),p,p_t);
-    
-    plot(II,JJ,'.b','MarkerSize',20)
-    
-    th = 0:pi/50:2*pi;
-    xunit = rho_i * cos(th) + c_i(1,1);
-    yunit = rho_i * sin(th) + c_i(2,1);
-    h = plot(xunit, yunit);
-    
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Medial Ball
-figure; hold all; axis equal;
-contour(I, [0.5,0.5]);
-plot(c_i(1,1),c_i(2,1),'.g','MarkerSize',20);
-plot(II,JJ,'.b','MarkerSize',20);
-th = 0:pi/50:2*pi;
-xunit = rho_i * cos(th) + c_i(1,1);
-yunit = rho_i * sin(th) + c_i(2,1);
-h = plot(xunit, yunit);
-
 
 
 
