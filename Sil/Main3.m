@@ -7,7 +7,7 @@ plot2 = @(P,varargin) plot(P(1,:), P(2,:), varargin{:} );
 
 I = imread('body1.jpg');
 % I = imread('body2.jpeg');
-% I = imread('fire.png');
+% I = imread('fire.png'); 
 % I = imread ('head.jpg');
 % I = imread('girl2.jpg');
 

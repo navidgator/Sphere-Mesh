@@ -75,7 +75,12 @@ quiver(RS(2),RS(1),RD(2),RD(1),100);
 % quiver(RS(2),RS(1),-RD(2),-RD(1),200);
 
 RD_R = -RD;
-[New,N_New] = New_Point(DIST,CORRS,S,RS,RD); 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Ray Shooting CENTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% [New,N_New] = March_c(DIST,CORRS,S,RS,RD,5); 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Ray shooting POINT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+[New,N_New] = New_Point(DIST,CORRS,S,RS,RD,5); 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PLOT THE NEW POINT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 plot(New(2),New(1),'.yellow','MarkerSize',20);
 quiver(New(2),New(1),N_New(2),N_New(1),50);
@@ -87,7 +92,39 @@ th = 0:pi/100:2*pi;
 xunit = rho * cos(th) + center(2);
 yunit = rho * sin(th) + center(1);
 h = plot(xunit, yunit);
+
+
+% for i = 0:10
+%     
+%     p = New;
+%     plot ([p(2),PI(2)],[p(1),PI(1)]);
+%     RD = PI-p;
+%     RD = Rotate90(RD');
+%     RD = RD/norm(RD);
+%     RS = (PI+p)/2;
+%     RD_R = -RD;
+%     [New,N_New] = New_Point(DIST,CORRS,S,RS,RD,5);
+%     [New2,N_New2] = New_Point(DIST,CORRS,S,RS,-RD,5);
+%     if (norm(New2-p)> norm(New-p))
+%         New = New2;
+%         N_New = N_New2;
+%     end
+%     plot(New(2),New(1),'.yellow','MarkerSize',20);
+%     quiver(New(2),New(1),N_New(2),N_New(1),50);
+%     
+%     [center,rho,PI] = Circle (I, New , N_New ,CORRS, CORRS2, 4);
+%     plot(center(2),center(1),'.g','MarkerSize',20);
+%     plot(PI(2),PI(1),'.black','MarkerSize',20);
+%     th = 0:pi/100:2*pi;
+%     xunit = rho * cos(th) + center(2);
+%     yunit = rho * sin(th) + center(1);
+%     h = plot(xunit, yunit);
+%     
+%     
+% end;
 return;
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
