@@ -41,6 +41,8 @@ if tmp==0
 	error('Error (2)')
 end
 
+
+
 ind = [ind(ind2-1),ind(ind2+1)];
 c_sel	= corners(:,ind);
 

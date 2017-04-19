@@ -58,11 +58,11 @@ while (1)
     %     c_id = abs(p - (rho_i*N));
     c_i = round(abs(p - (rho_i*N)));
     flag = 0;
-    for  i = -1:1
+    for  i = -2:2
         if (flag ==1)
             break;
         end
-        for j = -1:1
+        for j = -2:2
             if (c_i(1)+i > 0 && c_i(1)+i < size(Img,1) && c_i(2)+j > 0 && c_i(2)+j < size(Img,2))
                 tmp = [c_i(1)+i , c_i(2)+j];
                 if (Img(tmp(1),tmp(2)) == 0)          % IF THE CENTER LIES INSIDE OF THE IMAGE
@@ -77,7 +77,7 @@ while (1)
                 rho_i1 = RADIUS(N,p,p_t);
                 
                 if(rho_i - rho_i1 < epsilon)
-                    c_i = tmp ;
+                    c_i = tmp;
                     flag = 1;
                     break;
                 end

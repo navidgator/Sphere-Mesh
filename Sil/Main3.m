@@ -40,7 +40,7 @@ for i=1:size(N1,2), N1(:,i) = N1(:,i)./norm(N1(:,i)); end
 % p_index = r_ind;        % THE INDEX OF THE FIRST POINT (Random)
 % for p_index = 1 :size(P,2)
 
-iter = round(size(P,2)/300);
+iter = round(size(P,2)/500);
 % iter = 1;
 for p_index = 1 :iter:size(P,2)
 %     p_index= 301;
