@@ -10,7 +10,7 @@ S2 =  1-S;      % fliping the image color (black->white  , white -> black)
 % [DIST2, CORRS2] = dtform(S2); % dtform for the color-fliped image
 %   figure; imagesc(DIST2);
 % figure; axis equal; hold all;
-[P,~] = contour(Img, [0.5,0.5]);  % boundry of the image
+% [P,~] = contour(Img, [0.5,0.5]);  % boundry of the image
 
 IMAX = [size(Img,1) , size(Img,2)];
 FS = farthest(p,-N,IMAX);

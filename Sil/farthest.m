@@ -9,6 +9,26 @@
 % 
 % 
 % end
+% 
+% function [b] = farthest(p, v, Imax)
+% if norm(v)==0
+% 	error('Error (1): The normal vector is zero!')
+% 	return
+% end
+% 
+% p=p(:);		% to make sure it is column vector
+% v=v(:);		% to make sure it is column vector
+% 
+% Imin = [1;1];
+% 
+% corners = [ Imin(1),Imin(2)
+% 	Imax(1),Imin(2)
+% 	Imax(1),Imax(2)
+% 	Imin(1),Imax(2)]';
+% 
+% end
+
+
 
 function [b] = farthest(p, v, Imax)
 if norm(v)==0

@@ -55,7 +55,7 @@ p = [JJ,II];
 hold on;
 % plot(p(2),p(1),'.r','MarkerSize',20);
 
-[center,rho,PI] = Circle (I, p , N ,CORRS, CORRS2, 4);
+[center,rho,PI] = Circle (I, p , N ,CORRS, CORRS2, 1);
 
 contour(I, [0.5,0.5]);
 % plot(center(2),center(1),'.g','MarkerSize',20);
@@ -82,7 +82,7 @@ r1 = rho;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Ray Shooting CENTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % [New,N_New] = March_c(DIST,CORRS,S,RS,RD,5); 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Ray shooting POINT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[New,N_New] = New_Point(DIST,CORRS,S,RS,RD,5); 
+[New,N_New] = New_Point(DIST,CORRS,S,RS,RD,2); 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PLOT THE NEW POINT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % plot(New(2),New(1),'.yellow','MarkerSize',20);
@@ -97,7 +97,7 @@ yunit = rho * sin(th) + center(1);
 h = plot(xunit, yunit);
 c2 = center;
 r2 = rho;
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    BITANGENT   %%%%%%%%%%%%%
 [R1,R2,L1,L2] = Bitangent (c1,r1,c2,r2);
 plot(R1(2),R1(1),'.black','MarkerSize',5);
 plot(R2(2),R2(1),'.black','MarkerSize',5);
@@ -106,7 +106,7 @@ plot(L2(2),L2(1),'.G','MarkerSize',5);
 
 plot ([R1(2),R2(2)],[R1(1),R2(1)]);
 plot ([L1(2),L2(2)],[L1(1),L2(1)]);
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % for i = 0:10
 %     
